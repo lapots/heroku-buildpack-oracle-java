@@ -51,8 +51,8 @@ java_version() {
 install_java() {
   cache_dir=$1
   build_dir=$2  
-  jdk_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u111-b14/jdk-8u111-linux-x64.tar.gz"}
-  jdk_ver=${4:-"1.8.0_111"}
+  jdk_url=${3:-"http://download.java.net/java/jdk9/archive/181/binaries/jdk-9+181_linux-x64_bin.tar.gz"}
+  jdk_ver=${4:-"9"}
   
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store JDK."; fi
   if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to install JDK."; fi
@@ -75,26 +75,6 @@ install_java() {
   export PATH="${build_dir}/.jdk/bin:${PATH}"
 }
 
-install_jce() {
-  java_ver=$(java_version)
-  
-  if [ ! -n "${JAVA_HOME}" ]; then error "JAVA_HOME not set, unable to install JCE."; fi
-  if [ ! -d "${JAVA_HOME}" ]; then error "JAVA_HOME directory does not exist, unable to install JCE."; fi
-  
-  if [ "${java_ver:0:3}" == "1.8" ]; then
-    jce_url="http://download.oracle.com/otn-pub/java/jce/8/jce_policy-8.zip"
-    jce_dir="UnlimitedJCEPolicyJDK8"
-  else
-    error "Unable to resolve Java version for JCE"
-  fi
-  
-  cd $(mktmpdir jce)
-  curl -s -j -k -L -H "Cookie: oraclelicense=accept-securebackup-cookie" -o jce_policy.zip "${jce_url}"
-  jar xf jce_policy.zip
-  cd $jce_dir
-  cp -f *.jar "${JAVA_HOME}/jre/lib/security/"
-}
-
 maven_version() {
   base=$1
   echo $(${base}mvn --version 2>&1 | head -n 1 | cut -d ' ' -f 3)
@@ -102,8 +82,8 @@ maven_version() {
 
 install_maven() {
   cache_dir=$1
-  maven_url=${2:-"http://www.eu.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz"}
-  maven_ver=${3:-"3.3.9"}
+  maven_url=${2:-"http://www.eu.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz"}
+  maven_ver=${3:-"3.5.0"}
 
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store Maven."; fi
 

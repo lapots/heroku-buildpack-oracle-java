@@ -23,12 +23,6 @@ statusn "Installing JDK..."
 install_java $CACHE_DIR $BUILD_DIR
 echo " version $(java_version) installed"
 
-if [ "true" = "$JCE" ]; then
-  statusn "Installing JCE Unlimited Strength..."
-  install_jce
-  echo " done"
-fi
-
 statusn "Installing Maven..."
 install_maven $CACHE_DIR
 echo " version $(maven_version) installed"
@@ -49,6 +43,10 @@ cd $BUILD_DIR
 BUILDCMD="mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository"
 BUILDCMD="$BUILDCMD ${MAVEN_CUSTOM_OPTS:-"-DskipTests=true -U"}"
 BUILDCMD="$BUILDCMD ${MAVEN_CUSTOM_GOALS:-"clean install"}"
+
+status "Maven home: ${M2_HOME}"
+status "Java home: ${JAVA_HOME}"
+status "Build dir: $BUILD_DIR"
 
 status "Executing build..."
 echo "$BUILDCMD" | indent

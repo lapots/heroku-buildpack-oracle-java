@@ -7,4 +7,5 @@ cat <<EOF
 ---
 addons:
   - heroku-postgresql
+  - cloudamqp
 EOF
